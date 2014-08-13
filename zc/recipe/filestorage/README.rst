@@ -10,10 +10,47 @@ This recipe takes an optional path option.  If none is given, it creates and
 uses a subdirectory of the buildout parts directory with the same name as the
 part.
 
-The recipe records a zconfig option for use by other recipes.
+The recipe records a zconfig option for use by other recipes, e.g.
+plone.recipe.zope2instance.
 
-We'll show a couple of examples, using a dictionary as a simulated buildout
-object:
+Supported options
+=================
+
+path
+    The location of the ``Data.fs`` file to use for this filestorage.  If not
+    specified, defaults to ``parts/part_name/Data.fs``.
+blob-dir
+    The location of the blobstorage directory associated with this filestorage.
+    If this option is not specified or is set to the empty string, blobstorage will
+    not be used for this fs.
+mount-point
+    The location where this filestorage will be mounted.  Must start with '/'.
+    Defaults to '/' + part_name if not specified.
+
+
+Examples
+===============
+Sample config::
+
+    [buildout]
+    extends = base.cfg
+    parts =
+        fs1
+        instance
+    
+    [instance]
+    recipe = plone.recipe.zope2instance
+    user = me
+    zope-conf-additional += ${fs1:zconfig}
+    
+    [fs1]
+    recipe = zc.recipe.filestorage
+    path = var/fs1/Data.fs
+    blob-dir = var/fs1/blobstorage
+
+
+We'll show a couple of interactive examples, using a dictionary as a simulated
+buildout object:
 
     >>> import zc.recipe.filestorage
     >>> buildout = dict(
@@ -32,11 +69,12 @@ object:
 
     >>> from six import print_
     >>> print_(buildout['db']['zconfig'], end='')
-    <zodb>
+    <zodb_db db>
       <filestorage>
         path /buildout/foo/Main.fs
       </filestorage>
-    </zodb>
+      mount-point /db
+    </zodb_db>
 
     >>> recipe.install()
     ()
@@ -57,11 +95,12 @@ object:
     /tmp/tmpQo0DTB/db/Data.fs
 
     >>> print_(buildout['db']['zconfig'], end='')
-    <zodb>
+    <zodb_db db>
       <filestorage>
         path /tmp/tmpQo0DTB/db/Data.fs
       </filestorage>
-    </zodb>
+      mount-point /db
+    </zodb_db>
 
     >>> recipe.install()
     ()
