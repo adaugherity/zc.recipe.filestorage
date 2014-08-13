@@ -43,6 +43,7 @@ class Recipe:
         options['blob-dir'] = blob_dir
 
         options['zconfig'] = template % dict(
+            name=name,
             path=path,
             blob_dir=blob_dir)
 
@@ -57,7 +58,7 @@ class Recipe:
         self.install()
 
 plain_template = """\
-<zodb>
+<zodb %(name)s>
   <filestorage>
     path %(path)s
   </filestorage>
@@ -65,7 +66,7 @@ plain_template = """\
 """
 
 blob_template = """\
-<zodb>
+<zodb %(name)s>
   <blobstorage>
     blob-dir %(blob_dir)s
     <filestorage>
