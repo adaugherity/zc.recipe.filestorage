@@ -66,16 +66,16 @@ class Recipe:
         self.install()
 
 plain_template = """\
-<zodb %(name)s>
+<zodb_db %(name)s>
   <filestorage>
     path %(path)s
   </filestorage>
   mount-point %(mount_point)s
-</zodb>
+</zodb_db>
 """
 
 blob_template = """\
-<zodb %(name)s>
+<zodb_db %(name)s>
   <blobstorage>
     blob-dir %(blob_dir)s
     <filestorage>
@@ -83,5 +83,5 @@ blob_template = """\
     </filestorage>
   </blobstorage>
   mount-point %(mount_point)s
-</zodb>
+</zodb_db>
 """
