@@ -42,10 +42,18 @@ class Recipe:
                                     blob_dir)
         options['blob-dir'] = blob_dir
 
+        mount_point = options.get('mount-point', '')
+        if not mount_point:
+            mount_point = '/' + name
+        if not mount_point.startswith('/'):
+            logging.getLogger('zc.recipe.filestorage').error(
+                "mount-point %s does not start with '/'", mount_point)
+
         options['zconfig'] = template % dict(
             name=name,
             path=path,
-            blob_dir=blob_dir)
+            blob_dir=blob_dir,
+            mount_point=mount_point)
 
     def install(self):
         if self.make_part:
@@ -62,6 +70,7 @@ plain_template = """\
   <filestorage>
     path %(path)s
   </filestorage>
+  mount-point %(mount_point)s
 </zodb>
 """
 
@@ -73,5 +82,6 @@ blob_template = """\
       path %(path)s
     </filestorage>
   </blobstorage>
+  mount-point %(mount_point)s
 </zodb>
 """
