@@ -29,7 +29,7 @@ class Recipe:
             path = os.path.join(buildout['buildout']['directory'], path)
             if not os.path.exists(path):
                 logging.getLogger('zc.recipe.filestorage').error(
-                    "%s does not exixt", path)
+                    "%s does not exist", path)
             self.make_part = False
         options['path'] = path
 
